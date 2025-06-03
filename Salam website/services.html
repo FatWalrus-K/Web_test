@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Services - Salam Bahagia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      body {
+        background-color: #f5f5f5;
+        min-height: 100vh;
+      }
+
+      nav {
+        background-color: rgba(0, 51, 102, 0.9);
+        padding: 1rem 2rem;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .logo {
+        height: 50px;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      nav ul {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+      }
+
+      nav a:hover {
+        color: #ff4d4d;
+      }
+
+      .services-container {
+        min-height: 100vh;
+        padding-top: 120px;
+        padding: 120px 2rem 2rem;
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("https://images.unsplash.com/photo-1514214246283-d427a95c5d2f");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 3rem;
+        color: white;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .service-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+
+      .service-card.expanded {
+        position: absolute;
+        width: 100%;
+        height: auto;
+        z-index: 10;
+        grid-column: 1 / -1;
+      }
+
+      .service-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .service-basic {
+        text-align: center;
+      }
+
+      .service-expanded {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        padding-top: 2rem;
+      }
+
+      .service-card.expanded .service-expanded {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        opacity: 1;
+      }
+
+      .service-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.5s ease;
+      }
+
+      .service-card.expanded .service-image {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .service-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: #003366;
+      }
+
+      .service-card h2 {
+        color: #003366;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+      }
+
+      .service-card p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+
+      .service-features {
+        text-align: left;
+      }
+
+      .service-features li {
+        margin-bottom: 0.5rem;
+        color: #444;
+        list-style: none;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+
+      .service-features li:before {
+        content: "✓";
+        color: #003366;
+        position: absolute;
+        left: 0;
+      }
+
+      .close-button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #003366;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .service-card.expanded .close-button {
+        opacity: 1;
+      }
+
+      .expand-hint {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+        opacity: 0.7;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .service-features li {
+        animation: slideIn 0.3s ease forwards;
+        opacity: 0;
+        animation-delay: calc(var(--item-index) * 0.1s);
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="logo-container">
+        <img src="logo.png" alt="Salam Bahagia Logo" class="logo">
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="fleet.html">Our Fleet</a></li>
+        <li><a href="team.html">Our Team</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="services-container">
+      <h1>Our Services</h1>
+      <div class="services-grid">
+        <div class="service-card" onclick="expandCard(this)">
+          <button class="close-button" onclick="closeCard(event, this.parentElement)">×</button>
+          <div class="service-content">
+            <div class="service-basic">
+              <div class="service-icon">🔧</div>
+              <h2>Ship Repair</h2>
+              <p>Expert repair and maintenance services for all types of vessels.</p>
+              <div class="expand-hint">Click to learn more</div>
+            </div>
+            <div class="service-expanded">
+              <div class="service-details">
+                <h3>Comprehensive Repair Services</h3>
+                <p>Our state-of-the-art repair facilities and experienced technicians provide comprehensive repair and maintenance services for all vessel types.</p>
+                <div class="service-features">
+                  <ul>
+                    <li style="--item-index: 1">24/7 Emergency repairs</li>
+                    <li style="--item-index: 2">Hull inspection and repair</li>
+                    <li style="--item-index: 3">Engine overhaul and maintenance</li>
+                    <li style="--item-index: 4">Electrical system diagnostics</li>
+                    <li style="--item-index: 5">Navigation equipment servicing</li>
+                    <li style="--item-index: 6">Propulsion system repairs</li>
+                    <li style="--item-index: 7">Dry docking services</li>
+                    <li style="--item-index: 8">Underwater repairs</li>
+                  </ul>
+                </div>
+              </div>
+              <img src="https://images.unsplash.com/photo-1571388208497-71bedc66e932?ixlib=rb-4.0.3" alt="Ship Repair" class="service-image">
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card" onclick="expandCard(this)">
+          <button class="close-button" onclick="closeCard(event, this.parentElement)">×</button>
+          <div class="service-content">
+            <div class="service-basic">
+              <div class="service-icon">⚓</div>
+              <h2>Ship Building</h2>
+              <p>Custom ship building with cutting-edge technology.</p>
+              <div class="expand-hint">Click to learn more</div>
+            </div>
+            <div class="service-expanded">
+              <div class="service-details">
+                <h3>Custom Ship Building</h3>
+                <p>We specialize in building custom vessels that meet the highest standards of quality and performance.</p>
+                <div class="service-features">
+                  <ul>
+                    <li style="--item-index: 1">Custom design consultation</li>
+                    <li style="--item-index: 2">3D modeling and prototyping</li>
+                    <li style="--item-index: 3">Advanced welding techniques</li>
+                    <li style="--item-index: 4">Quality material sourcing</li>
+                    <li style="--item-index: 5">Progressive building methods</li>
+                    <li style="--item-index: 6">Interior outfitting</li>
+                    <li style="--item-index: 7">Systems integration</li>
+                    <li style="--item-index: 8">Performance testing</li>
+                  </ul>
+                </div>
+              </div>
+              <img src="https://images.unsplash.com/photo-1590374504314-295374f03311?ixlib=rb-4.0.3" alt="Ship Building" class="service-image">
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card" onclick="expandCard(this)">
+          <button class="close-button" onclick="closeCard(event, this.parentElement)">×</button>
+          <div class="service-content">
+            <div class="service-basic">
+              <div class="service-icon">🚢</div>
+              <h2>Ship Rental</h2>
+              <p>Flexible vessel rental solutions for your needs.</p>
+              <div class="expand-hint">Click to learn more</div>
+            </div>
+            <div class="service-expanded">
+              <div class="service-details">
+                <h3>Vessel Rental Services</h3>
+                <p>Our diverse fleet of vessels is available for both short-term and long-term charter, complete with experienced crew options.</p>
+                <div class="service-features">
+                  <ul>
+                    <li style="--item-index: 1">Flexible rental terms</li>
+                    <li style="--item-index: 2">Professional crew provision</li>
+                    <li style="--item-index: 3">Comprehensive insurance</li>
+                    <li style="--item-index: 4">24/7 technical support</li>
+                    <li style="--item-index: 5">Fuel management</li>
+                    <li style="--item-index: 6">Route planning</li>
+                    <li style="--item-index: 7">Weather monitoring</li>
+                    <li style="--item-index: 8">Emergency response</li>
+                  </ul>
+                </div>
+              </div>
+              <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?ixlib=rb-4.0.3" alt="Ship Rental" class="service-image">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function expandCard(card) {
+        // Close any previously expanded cards
+        document.querySelectorAll('.service-card.expanded').forEach(expandedCard => {
+          if (expandedCard !== card) {
+            expandedCard.classList.remove('expanded');
+          }
+        });
+
+        // Toggle the clicked card
+        card.classList.toggle('expanded');
+      }
+
+      function closeCard(event, card) {
+        event.stopPropagation(); // Prevent the card's click event from firing
+        card.classList.remove('expanded');
+      }
+
+      // Add animation delay to feature items
+      document.querySelectorAll('.service-features li').forEach((item, index) => {
+        item.style.setProperty('--item-index', index + 1);
+      });
+    </script>
+  </body>
+</html> 
