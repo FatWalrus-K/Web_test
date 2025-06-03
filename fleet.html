@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Fleet - Salam Bahagia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      body {
+        background-color: #f5f5f5;
+        min-height: 100vh;
+      }
+
+      nav {
+        background-color: rgba(0, 51, 102, 0.9);
+        padding: 1rem 2rem;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .logo {
+        height: 50px;
+        width: auto;
+        margin-right: 1rem;
+      }
+
+      nav ul {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+      }
+
+      nav a:hover {
+        color: #ff4d4d;
+      }
+
+      .fleet-container {
+        min-height: 100vh;
+        padding: 120px 2rem 2rem;
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("https://images.unsplash.com/photo-1514214246283-d427a95c5d2f");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 3rem;
+        color: white;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      }
+
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .category-icon {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        aspect-ratio: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .category-icon:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+      }
+
+      .icon-emoji {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+      }
+
+      .category-name {
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #003366;
+      }
+
+      .ships-grid {
+        display: none;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 3rem auto 0;
+      }
+
+      .ships-grid.active {
+        display: grid;
+      }
+
+      .ship-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        animation: fadeIn 0.5s ease forwards;
+      }
+
+      .ship-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .ship-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .ship-info-preview {
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .ship-name {
+        color: #003366;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .ship-type {
+        color: #666;
+        font-size: 1.1rem;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal.active {
+        display: flex;
+        opacity: 1;
+      }
+
+      .modal-content {
+        background: white;
+        width: 90%;
+        max-width: 800px;
+        margin: auto;
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+        transform: translateY(50px);
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .modal.active .modal-content {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .modal-header {
+        position: relative;
+        height: 300px;
+      }
+
+      .modal-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      }
+
+      .modal-body {
+        padding: 2rem;
+      }
+
+      .modal-title {
+        color: #003366;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .ship-details {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .ship-details li {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        color: #003366;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .back-button {
+        background: #003366;
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        margin: 2rem auto;
+        display: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .back-button.active {
+        display: block;
+      }
+
+      .back-button:hover {
+        background: #004480;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(100px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="index.html" class="logo-container">
+        <img src="logo.png" alt="Salam Bahagia Logo" class="logo">
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="fleet.html">Our Fleet</a></li>
+        <li><a href="team.html">Our Team</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="fleet-container">
+      <h1>Our Fleet</h1>
+      
+      <div class="category-grid">
+        <div class="category-icon" data-category="passenger" onclick="showCategory('passenger')">
+          <div class="icon-emoji">🚢</div>
+          <div class="category-name">Passenger Boats</div>
+        </div>
+        <div class="category-icon" data-category="harbour" onclick="showCategory('harbour')">
+          <div class="icon-emoji">⚓</div>
+          <div class="category-name">Harbour Tugs</div>
+        </div>
+        <div class="category-icon" data-category="tugboat" onclick="showCategory('tugboat')">
+          <div class="icon-emoji">🛥️</div>
+          <div class="category-name">Tugboats</div>
+        </div>
+        <div class="category-icon" data-category="barge" onclick="showCategory('barge')">
+          <div class="icon-emoji">🚤</div>
+          <div class="category-name">Barges</div>
+        </div>
+      </div>
+
+      <button class="back-button" onclick="showCategories()">Back to Categories</button>
+
+      <div id="passenger" class="ships-grid">
+        <div class="ship-card" onclick="showShipDetails(this)">
+          <img src="https://images.unsplash.com/photo-1566847438217-76e82d383f84" alt="Marina Star" class="ship-image">
+          <div class="ship-info-preview">
+            <h3 class="ship-name">Marina Star</h3>
+            <div class="ship-type">Passenger Ferry</div>
+          </div>
+          <div class="ship-full-details" style="display: none;">
+            <ul class="ship-details">
+              <li><span class="detail-label">Year Built</span>2018</li>
+              <li><span class="detail-label">Dimensions</span>35.5m x 8.2m</li>
+              <li><span class="detail-label">Horsepower</span>2 x 1200 HP</li>
+              <li><span class="detail-label">Vessel Type</span>Passenger Ferry</li>
+              <li><span class="detail-label">Capacity</span>150 passengers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="harbour" class="ships-grid">
+        <div class="ship-card" onclick="showShipDetails(this)">
+          <img src="https://images.unsplash.com/photo-1590846406792-0adc7f938f1d" alt="Harbor Master" class="ship-image">
+          <div class="ship-info-preview">
+            <h3 class="ship-name">Harbor Master</h3>
+            <div class="ship-type">Harbor Tug</div>
+          </div>
+          <div class="ship-full-details" style="display: none;">
+            <ul class="ship-details">
+              <li><span class="detail-label">Year Built</span>2019</li>
+              <li><span class="detail-label">Dimensions</span>28.5m x 9.8m</li>
+              <li><span class="detail-label">Horsepower</span>4800 HP</li>
+              <li><span class="detail-label">Vessel Type</span>Harbor Tug</li>
+              <li><span class="detail-label">Bollard Pull</span>65 tonnes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="tugboat" class="ships-grid">
+        <div class="ship-card" onclick="showShipDetails(this)">
+          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d" alt="Ocean Force" class="ship-image">
+          <div class="ship-info-preview">
+            <h3 class="ship-name">Ocean Force</h3>
+            <div class="ship-type">Ocean Tugboat</div>
+          </div>
+          <div class="ship-full-details" style="display: none;">
+            <ul class="ship-details">
+              <li><span class="detail-label">Year Built</span>2020</li>
+              <li><span class="detail-label">Dimensions</span>32.0m x 11.5m</li>
+              <li><span class="detail-label">Horsepower</span>6000 HP</li>
+              <li><span class="detail-label">Vessel Type</span>Ocean Tugboat</li>
+              <li><span class="detail-label">Bollard Pull</span>85 tonnes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="barge" class="ships-grid">
+        <div class="ship-card" onclick="showShipDetails(this)">
+          <img src="https://images.unsplash.com/photo-1520437358207-323b43b50729" alt="Cargo King" class="ship-image">
+          <div class="ship-info-preview">
+            <h3 class="ship-name">Cargo King</h3>
+            <div class="ship-type">Flat Top Barge</div>
+          </div>
+          <div class="ship-full-details" style="display: none;">
+            <ul class="ship-details">
+              <li><span class="detail-label">Year Built</span>2017</li>
+              <li><span class="detail-label">Dimensions</span>75.0m x 22.0m</li>
+              <li><span class="detail-label">Vessel Type</span>Flat Top Barge</li>
+              <li><span class="detail-label">Capacity</span>5000 DWT</li>
+              <li><span class="detail-label">Deck Strength</span>15 t/m²</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="shipModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img src="" alt="" class="modal-image">
+          <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <h2 class="modal-title"></h2>
+          <div class="modal-details"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showCategory(category) {
+        // Hide category grid
+        document.querySelector('.category-grid').style.display = 'none';
+        
+        // Show back button
+        document.querySelector('.back-button').classList.add('active');
+        
+        // Hide all ship grids
+        document.querySelectorAll('.ships-grid').forEach(grid => {
+          grid.classList.remove('active');
+        });
+        
+        // Show selected category
+        document.getElementById(category).classList.add('active');
+      }
+
+      function showCategories() {
+        // Show category grid
+        document.querySelector('.category-grid').style.display = 'grid';
+        
+        // Hide back button
+        document.querySelector('.back-button').classList.remove('active');
+        
+        // Hide all ship grids
+        document.querySelectorAll('.ships-grid').forEach(grid => {
+          grid.classList.remove('active');
+        });
+      }
+
+      function showShipDetails(card) {
+        const modal = document.getElementById('shipModal');
+        const modalImage = modal.querySelector('.modal-image');
+        const modalTitle = modal.querySelector('.modal-title');
+        const modalDetails = modal.querySelector('.modal-details');
+        
+        // Get ship details
+        const image = card.querySelector('.ship-image').src;
+        const name = card.querySelector('.ship-name').textContent;
+        const details = card.querySelector('.ship-full-details').innerHTML;
+        
+        // Set modal content
+        modalImage.src = image;
+        modalImage.alt = name;
+        modalTitle.textContent = name;
+        modalDetails.innerHTML = details;
+        
+        // Show modal
+        modal.classList.add('active');
+        
+        // Prevent body scrolling
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        const modal = document.getElementById('shipModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+
+      // Close modal when clicking outside
+      document.getElementById('shipModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html> 
